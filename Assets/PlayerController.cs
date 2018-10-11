@@ -9,14 +9,16 @@ public class PlayerController : MonoBehaviour {
     Rigidbody2D rb;
     Animator anim;
 
-   
+    public float attackTime;
+
+
     public bool isAttacking;
     public bool isRunning;
     public float speed;
     private bool facingRight;
     private bool facingLeft;
 
-
+    
     private float moveHorizontal;
     
     // Use this for initialization
@@ -74,9 +76,12 @@ public class PlayerController : MonoBehaviour {
 
         if (down)
         {
-            //Debug.Log("Space pressed");
-            //isAttacking = true;
-            StartCoroutine("AttackSeq");
+            if (!isAttacking)
+            {
+                //Debug.Log("Space pressed");
+                //isAttacking = true;
+                StartCoroutine("AttackSeq");
+            }
             
 
         }
@@ -93,7 +98,7 @@ public class PlayerController : MonoBehaviour {
     IEnumerator AttackSeq()
     {
         isAttacking = true;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(attackTime);
         isAttacking = false;
     }
 
