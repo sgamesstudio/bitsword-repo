@@ -711,6 +711,11 @@ Prefab:
       propertyPath: m_Name
       value: Skeleton
       objectReference: {fileID: 0}
+    - target: {fileID: 50765417017115202, guid: 32ac7adefaa26d9489639bd30744d258,
+        type: 2}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ac7adefaa26d9489639bd30744d258, type: 2}
   m_IsPrefabAsset: 0
