@@ -12,13 +12,15 @@ public class PlayerController : MonoBehaviour {
     public float attackTime;
 
 
-    public bool isAttacking;
-    public bool isRunning;
-    public float speed;
+    public bool attacking;
+    public bool running;
+    public bool jumping;
+    public bool falling;
     private bool facingRight;
     private bool facingLeft;
 
-    
+    public float speed;
+
     private float moveHorizontal;
     
     // Use this for initialization
@@ -26,13 +28,15 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         
-        isAttacking = false;
+        attacking = false;
+        jumping = false;
+        falling = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        Attack();
-        Movement();
+        Input();
+        Physics();
         //Debug.Log("isrunning: " + isRunning);
         CheckAnimation();
 	}
@@ -45,14 +49,20 @@ public class PlayerController : MonoBehaviour {
     void CheckAnimation()
     {
 
-        if (isAttacking)
+        if (attacking && !jumping)
         {
             anim.SetBool("isAttacking", true);
         }
+        else if (jumping)
+        {
+            anim.SetBool("isJumping", true);
+        }
         else
         {
+            anim.SetBool("isAttacking", false);
+            anim.SetBool("isJumping", false);
             //Debug.Log("isrunning: " + isRunning);
-            if (isRunning)
+            if (running)
             {
                 anim.SetBool("isRunning", true);
 
@@ -62,27 +72,62 @@ public class PlayerController : MonoBehaviour {
                 anim.SetBool("isRunning", false);
             }
             
-            anim.SetBool("isAttacking", false);
+            
         }
     }
 
-    void Attack()
+    void Input()
     {
+        Movement();
+        Jumping();
+        Attacking();
+    }
 
-
-        bool down = Input.GetKeyDown(KeyCode.Space);
-        bool held = Input.GetKey(KeyCode.Space);
-        bool up = Input.GetKeyUp(KeyCode.Space);
+    void Movement()
+    {
+        moveHorizontal = UnityEngine.Input.GetAxisRaw("Horizontal");
+    }
+    void Jumping()
+    {
+        bool down = UnityEngine.Input.GetKeyDown(KeyCode.UpArrow);
+        bool held = UnityEngine.Input.GetKey(KeyCode.UpArrow);
+        bool up = UnityEngine.Input.GetKeyUp(KeyCode.UpArrow);
 
         if (down)
         {
-            if (!isAttacking)
+            if (!attacking && !jumping && !falling)
+            {
+                //Debug.Log("Space pressed");
+                //isAttacking = true;
+                StartCoroutine("JumpSeq");
+            }
+
+
+        }
+        else if (held)
+        {
+
+        }
+        else if (up)
+        {
+
+        }
+    }
+    void Attacking()
+    {
+        bool down = UnityEngine.Input.GetKeyDown(KeyCode.Space);
+        bool held = UnityEngine.Input.GetKey(KeyCode.Space);
+        bool up = UnityEngine.Input.GetKeyUp(KeyCode.Space);
+
+        if (down)
+        {
+            if (!attacking && !jumping)
             {
                 //Debug.Log("Space pressed");
                 //isAttacking = true;
                 StartCoroutine("AttackSeq");
             }
-            
+
 
         }
         else if (held)
@@ -97,25 +142,31 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator AttackSeq()
     {
-        isAttacking = true;
+        attacking = true;
         yield return new WaitForSeconds(attackTime);
-        isAttacking = false;
+        attacking = false;
+    }
+    IEnumerator JumpSeq()
+    {
+        jumping = true;
+        yield return 0;
+        jumping = false;
     }
 
-    void Movement()
+    void Physics()
     {
-        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        
         //Debug.Log("moveHorizontal: " + moveHorizontal);
-        if(moveHorizontal != 0 && isAttacking == false)
+        if(moveHorizontal != 0 && attacking == false)
         {
-            isRunning = true;
+            running = true;
 
             MovePlayer();
 
         }
         else
         {
-            isRunning = false;
+            running = false;
             rb.velocity = new Vector2(0, rb.velocity.y) * Time.deltaTime;
         }
     }

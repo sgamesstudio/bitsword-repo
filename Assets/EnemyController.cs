@@ -81,6 +81,7 @@ public class EnemyController : MonoBehaviour {
             {
                 //print("is aware");
                 walking = false;
+                alreadyRoaming = false;
             }
             else
             {
