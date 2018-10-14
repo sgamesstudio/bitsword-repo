@@ -264,5 +264,6 @@ public class EnemyController : MonoBehaviour {
     public void kill()
     {
         dead = true;
+        rb.simulated = false;
     }
 }
