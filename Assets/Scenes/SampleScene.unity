@@ -423,8 +423,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackobject: {fileID: 1380478236}
   attackTime: 0.4
-  isAttacking: 0
-  isRunning: 0
+  attacking: 0
+  running: 0
+  jumping: 0
+  falling: 0
   speed: 30
 --- !u!50 &881689109
 Rigidbody2D:
@@ -444,7 +446,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!61 &881689110
 BoxCollider2D:

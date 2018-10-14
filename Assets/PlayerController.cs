@@ -10,7 +10,9 @@ public class PlayerController : MonoBehaviour {
     Animator anim;
 
     public float attackTime;
+    public float jumpHeight;
 
+    bool jumpFrame;
 
     public bool attacking;
     public bool running;
@@ -22,7 +24,11 @@ public class PlayerController : MonoBehaviour {
     public float speed;
 
     private float moveHorizontal;
-    
+
+    // For check falling func
+    float prevY;
+    bool flag1;
+
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -31,10 +37,13 @@ public class PlayerController : MonoBehaviour {
         attacking = false;
         jumping = false;
         falling = false;
+        jumpFrame = false;
+        flag1 = false;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        CheckFalling();
         Input();
         Physics();
         //Debug.Log("isrunning: " + isRunning);
@@ -42,9 +51,33 @@ public class PlayerController : MonoBehaviour {
 	}
 
 
+    public void JumpFrame()
+    {
+        jumpFrame = true;
+    }
 
-
-
+    void CheckFalling()
+    {
+        if (!flag1)
+        {
+            prevY = rb.position.y;
+            flag1 = true;
+        }
+        else
+        {
+            if (rb.position.y < prevY)
+            {
+                falling = true;
+                jumping = false;
+            }
+            else
+            {
+                falling = false;
+            }
+            flag1 = false;
+        }
+       
+    }
 
     void CheckAnimation()
     {
@@ -53,7 +86,7 @@ public class PlayerController : MonoBehaviour {
         {
             anim.SetBool("isAttacking", true);
         }
-        else if (jumping)
+        else if (jumping && !falling)
         {
             anim.SetBool("isJumping", true);
         }
@@ -86,6 +119,10 @@ public class PlayerController : MonoBehaviour {
     void Movement()
     {
         moveHorizontal = UnityEngine.Input.GetAxisRaw("Horizontal");
+        if (moveHorizontal != 0)
+        {
+            running = true;
+        }
     }
     void Jumping()
     {
@@ -99,7 +136,8 @@ public class PlayerController : MonoBehaviour {
             {
                 //Debug.Log("Space pressed");
                 //isAttacking = true;
-                StartCoroutine("JumpSeq");
+                //StartCoroutine("JumpSeq");
+                jumping = true;
             }
 
 
@@ -148,8 +186,8 @@ public class PlayerController : MonoBehaviour {
     }
     IEnumerator JumpSeq()
     {
-        jumping = true;
-        yield return 0;
+        
+        yield return new WaitForSeconds(0.5f);
         jumping = false;
     }
 
@@ -159,14 +197,24 @@ public class PlayerController : MonoBehaviour {
         //Debug.Log("moveHorizontal: " + moveHorizontal);
         if(moveHorizontal != 0 && attacking == false)
         {
-            running = true;
+            
 
             MovePlayer();
 
         }
+        else if (jumping && !falling)
+        {
+            if (jumpFrame)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpHeight) * Time.deltaTime;
+                jumpFrame = false;
+                //jumping = false;
+            }
+        }
         else
         {
             running = false;
+            jumping = false;
             rb.velocity = new Vector2(0, rb.velocity.y) * Time.deltaTime;
         }
     }
