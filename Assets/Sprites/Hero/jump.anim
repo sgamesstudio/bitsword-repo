@@ -20,17 +20,17 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 5028383766ce5e948a472c3cb6dd053b, type: 3}
-    - time: 0.125
+    - time: 0.2
       value: {fileID: 21300000, guid: 1eedd4c53b3675d47bc320eff97fe774, type: 3}
-    - time: 0.25
+    - time: 0.4
       value: {fileID: 21300000, guid: 2096fe88379c87d49a4642ee71715d4b, type: 3}
-    - time: 0.375
+    - time: 0.6
       value: {fileID: 21300000, guid: 7149c3b8c873cf94ca6ec2d353a6a036, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 8
+  m_SampleRate: 5
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -54,7 +54,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.5
+    m_StopTime: 0.8
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -75,8 +75,8 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 0.25
-    functionName: JumpFrame
+  - time: 0.4
+    functionName: FrameJump
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

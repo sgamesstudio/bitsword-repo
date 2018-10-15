@@ -82,18 +82,27 @@ public class PlayerController : MonoBehaviour {
     void CheckAnimation()
     {
 
-        if (attacking && !jumping)
+        if (attacking && !jumping && !falling)
         {
             anim.SetBool("isAttacking", true);
         }
         else if (jumping && !falling)
         {
             anim.SetBool("isJumping", true);
+            anim.SetBool("isRunning", false);
+        }
+        else if (falling)
+        {
+            anim.SetBool("isFalling", true);
+            anim.SetBool("isRunning", false);
+            anim.SetBool("isJumping", false);
+            anim.SetBool("isAttacking", false);
         }
         else
         {
             anim.SetBool("isAttacking", false);
             anim.SetBool("isJumping", false);
+            anim.SetBool("isFalling", false);
             //Debug.Log("isrunning: " + isRunning);
             if (running)
             {
@@ -159,7 +168,7 @@ public class PlayerController : MonoBehaviour {
 
         if (down)
         {
-            if (!attacking && !jumping)
+            if (!attacking && !jumping && !falling)
             {
                 //Debug.Log("Space pressed");
                 //isAttacking = true;
@@ -195,14 +204,13 @@ public class PlayerController : MonoBehaviour {
     {
         
         //Debug.Log("moveHorizontal: " + moveHorizontal);
-        if(moveHorizontal != 0 && attacking == false)
+        if(moveHorizontal != 0 && !attacking)
         {
             
-
             MovePlayer();
 
         }
-        else if (jumping && !falling)
+        if (jumping && !falling)
         {
             if (jumpFrame)
             {
@@ -213,7 +221,7 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            running = false;
+            
             jumping = false;
             rb.velocity = new Vector2(0, rb.velocity.y) * Time.deltaTime;
         }
